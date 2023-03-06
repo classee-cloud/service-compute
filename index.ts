@@ -3,7 +3,7 @@ import bodyParser from 'body-parser';
 import dotenv from 'dotenv';
 import cors from "cors";
 import * as child_process from 'child_process'; 
-
+import axios from 'axios';
 
 // ----------------------------------------------------
 const app: Express  = express();
@@ -25,12 +25,15 @@ app.post('/runner', jsonParser, async (req: Request, res: Response)=>{
     //const authToken = req.body.token; //jwt token
     const repoURL = workflowRepo.html_url;
 
-    //const org = repoURL.split("/").slice(-2, -1)[0];
     const repoName = repoURL.split("/").at(-1);
-    
+
+    const response = await axios.get(`http://localhost:8181/runnertoken/${org}/${repoName}/`)
+    const token = response.data.token;
+    //console.log(response);
+
     //console.log(authToken, org, repoName);
     //var executeDocker = await child_process.exec('sudo docker run --rm actions-image '+ repoURL + ' ' + org + ' ' + repoName + ' ' + authToken,  
-    var executeDocker = await child_process.exec('sudo docker run --rm actions-image '+ repoURL + ' ' + org + ' ' + repoName,  
+    var executeDocker = await child_process.exec('sudo docker run --rm actions-image '+ repoURL + ' ' + token,  
                         (err, stdout, stderr) => {
                           if (err) {
                             console.error(err)

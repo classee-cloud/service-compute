@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 URL=$1
-ORG=$2
-REPONAME=$3
-AUTH_TOKEN=$4
-NAME=$5
+token=$2
+NAME=$3
+
+#ORG=$4
+#REPONAME=$5
+#AUTH_TOKEN=$5
 
 
 #cleanup() {
@@ -18,12 +20,11 @@ NAME=$5
 #    https://api.github.com/repos/${ORG}/${REPONAME}/actions/runners/registration-token |\
 #    jq -r .token)
 
-token=$(curl -s -XPOST \
-    https://localhost:8181/runnertoken/${ORG}/${REPONAME} |\
-    jq -r .token)
+#token=$(curl -s -XGET localhost:8181/runnertoken/${ORG}/${REPONAME} | jq -r .token)
 
-./config.sh --url ${URL} --token ${token} --work _work --name ${NAME} --emphemeral
+echo | ./config.sh --url ${URL} --token ${token} --work _work --name ${NAME} --ephemeral
+#./config.sh --url https://github.com/rajatkeshri/React-Course --token AHUOPPOYJ7AIKI7BJXUKVOTD7RLOC
 
-./run.sh --once
+./run.sh
 
 #cleanup
