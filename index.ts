@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from "cors";
 import * as child_process from 'child_process'; 
 import axios from 'axios';
+import {authenticateToken} from "./middleware/authenticateToken";
 
 // ----------------------------------------------------
 const app: Express  = express();
@@ -12,12 +13,12 @@ var jsonParser = bodyParser.json()
 const PORT = process.env.PORT || 8282;
 
 
-app.get('/', async (req: Request, res: Response)=>{
+app.get('/', authenticateToken, async (req: Request, res: Response)=>{
    res.status(200);
    res.send("Home get")
 });
 
-app.post('/runner', jsonParser, async (req: Request, res: Response)=>{
+app.post('/runner', authenticateToken, jsonParser, async (req: Request, res: Response)=>{
     const workflowID = req.body.id;
     const workflowJob = req.body.workflow_job;
     const org = req.body.org_name;
@@ -27,7 +28,7 @@ app.post('/runner', jsonParser, async (req: Request, res: Response)=>{
 
     const repoName = repoURL.split("/").at(-1);
 
-    const response = await axios.get(`http://localhost:8181/runnertoken/${org}/${repoName}/`)
+    const response = await axios.get(`https://gh-dev.classee.cloud/runnertoken/${org}/${repoName}/`)
     const token = response.data.token;
     //console.log(response);
 
