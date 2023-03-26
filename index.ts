@@ -11,6 +11,9 @@ const app: Express  = express();
 app.use(cors())
 var jsonParser = bodyParser.json()
 const PORT = process.env.PORT || 8282;
+const REACT_APP_SERVICE_DB=process.env.REACT_APP_SERVICE_DB || "https://db-dev.classee.cloud"
+const REACT_APP_SERVICE_GITHUB=process.env.REACT_APP_SERVICE_GITHUB || "https://gh-dev.classee.cloud"
+
 
 
 app.get('/', authenticateToken, async (req: Request, res: Response)=>{
@@ -28,7 +31,7 @@ app.post('/runner', authenticateToken, jsonParser, async (req: Request, res: Res
 
     const repoName = repoURL.split("/").at(-1);
 
-    const response = await axios.get(`https://gh-dev.classee.cloud/runnertoken/${org}/${repoName}/`)
+    const response = await axios.get(REACT_APP_SERVICE_GITHUB + `/runnertoken/${org}/${repoName}/`)
     const token = response.data.token;
     //console.log(response);
 
