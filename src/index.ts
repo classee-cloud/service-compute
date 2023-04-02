@@ -14,7 +14,7 @@ const PORT = process.env.PORT || 8282;
 const REACT_APP_SERVICE_DB=process.env.REACT_APP_SERVICE_DB || "https://db-dev.classee.cloud"
 const REACT_APP_SERVICE_GITHUB=process.env.REACT_APP_SERVICE_GITHUB || "https://gh-dev.classee.cloud"
 
-
+dotenv.config();
 
 app.get('/', authenticateToken, async (req: Request, res: Response)=>{
    res.status(200);
