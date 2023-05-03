@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import fs from 'fs/promises';
 import path from "path";
 
+// function to authenticae JWT.
 async function authenticateToken(req:Request, res:Response, next:NextFunction){
     var cert = await fs.readFile(path.join(__dirname, 'auth-ripley-cloud_certificate.pem')) // get public key
 

@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import cors from "cors";
 import * as child_process from 'child_process'; 
 import axios from 'axios';
-import {authenticateToken} from "./middleware/authenticateToken";
+import {authenticateToken} from "./src/middleware/authenticateToken";
 
 // ----------------------------------------------------
 const app: Express  = express();
@@ -13,13 +13,16 @@ var jsonParser = bodyParser.json()
 const PORT = process.env.PORT || 8282;
 const REACT_APP_SERVICE_DB=process.env.REACT_APP_SERVICE_DB || "https://db-dev.classee.cloud"
 const REACT_APP_SERVICE_GITHUB=process.env.REACT_APP_SERVICE_GITHUB || "https://gh-dev.classee.cloud"
-dotenv.config();
 
-app.get('/', authenticateToken, async (req: Request, res: Response)=>{
+
+// GET / end point - returns home page
+app.get('/', async (req: Request, res: Response)=>{
    res.status(200);
    res.send("Home get")
 });
 
+
+// POST - /runner - end point creates docker container and runs the configured code form the github repo.
 app.post('/runner', jsonParser, async (req: Request, res: Response)=>{ 
     const workflowID = req.body.id;
     const workflowJob = req.body.workflow_job;
@@ -31,6 +34,7 @@ app.post('/runner', jsonParser, async (req: Request, res: Response)=>{
     const accessToken = req.body.authorization;
     //console.log(accessToken);
 
+    // get the token from github service. This toke is used to allocate a VM as a self hosted runner for github to recognize
     const response = await axios.get(REACT_APP_SERVICE_GITHUB + `/runnertoken/${org}/${repoName}/${accessToken}`)
     const token = response.data.token;
 
