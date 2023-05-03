@@ -4,7 +4,7 @@ import dotenv from 'dotenv';
 import cors from "cors";
 import * as child_process from 'child_process'; 
 import axios from 'axios';
-import {authenticateToken} from "./middleware/authenticateToken";
+import {authenticateToken} from "./src/middleware/authenticateToken";
 
 // ----------------------------------------------------
 const app: Express  = express();
@@ -13,9 +13,9 @@ var jsonParser = bodyParser.json()
 const PORT = process.env.PORT || 8282;
 const REACT_APP_SERVICE_DB=process.env.REACT_APP_SERVICE_DB || "https://db-dev.classee.cloud"
 const REACT_APP_SERVICE_GITHUB=process.env.REACT_APP_SERVICE_GITHUB || "https://gh-dev.classee.cloud"
-dotenv.config();
 
-app.get('/', authenticateToken, async (req: Request, res: Response)=>{
+
+app.get('/', async (req: Request, res: Response)=>{
    res.status(200);
    res.send("Home get")
 });
